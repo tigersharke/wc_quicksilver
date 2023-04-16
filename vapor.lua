@@ -19,7 +19,7 @@ local vaptxr = "(" ..modname.. ".png^[verticalframe:32:8)^[opacity:100"
 minetest.register_node(modname ..":vapor", {
 		description = "Mercurial Vapor",
 		tiles = {vaptxr},
-		use_texture_alpha = true,
+		use_texture_alpha = "blend",
 		drawtype = "allfaces",
 		drowning = 2,
 		damage_per_second = 8,
