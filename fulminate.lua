@@ -417,7 +417,7 @@ nodecore.register_aism({
 		chance = 1,
 		itemnames = {"group:fulminate"},
 		action = function(stack, data)
-			nodecore.sound_play(modname.. "_crackle", {gain = 0.4})
+			nodecore.sound_play(modname.. "_crackle", {gain = 0.4, pos = data.pos})
 			nodecore.firestick_spark_ignite(data.pos, data.player or data.obj, stack)
 		end
 	})
