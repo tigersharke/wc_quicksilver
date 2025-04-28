@@ -204,7 +204,7 @@ for i = 1, nodecore.flare_life_stages do
 			collision_box = nodecore.fixedbox(-1/16, -0.5, -1/16, 1/16, 0.5, 1/16),
 			paramtype = "light",
 			sunlight_propagates = true,
-			light_source = 16 - i,
+			light_source = 15 - i,
 			groups = {
 				snappy = 1,
 				falling_repose = 1,
@@ -353,7 +353,7 @@ minetest.register_node(modname .. ":lamp", {
 				falling_node = 1,
 			},
 			stack_max = 1,
-			light_source = 15,
+			light_source = 14,
 			sounds = nodecore.sounds("nc_lode_annealed")
 		})
 ----------------------------------------------------------------------
