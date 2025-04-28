@@ -1,12 +1,12 @@
 -- LUALOCALS < ---------------------------------------------------------
-local math, minetest, nodecore
-    = math, minetest, nodecore
+local math, minetest, core, nodecore, nc
+    = math, minetest, core, nodecore, nc
 local math_random
     = math.random
 -- LUALOCALS > ---------------------------------------------------------
-local modname = minetest.get_current_modname()
-local get_node = minetest.get_node
-local set_node = minetest.swap_node
+local modname = core.get_current_modname()
+local get_node = core.get_node
+local set_node = core.swap_node
 ---------------------------------------------------------
 local function anim(name, len)
 	return {
@@ -46,22 +46,22 @@ local quickdef = {
 	post_effect_color = {a = 240, r = 75, g = 110, b = 110},
 	liquid_alternative_flowing = modname .. ":quicksilver_flowing",
 	liquid_alternative_source = modname .. ":quicksilver_source",
-	sounds = nodecore.sounds("nc_terrain_bubbly")
+	sounds = nc.sounds("nc_terrain_bubbly")
 }
 ---------------------------------------------------------
-minetest.register_node(modname .. ":quicksilver_source",
-	nodecore.underride({
+core.register_node(modname .. ":quicksilver_source",
+	nc.underride({
 			liquidtype = "source"
 		}, quickdef))
 
-minetest.register_node(modname .. ":quicksilver_flowing",
-	nodecore.underride({
+core.register_node(modname .. ":quicksilver_flowing",
+	nc.underride({
 			liquidtype = "flowing",
 			drawtype = "flowingliquid",
 			paramtype2 = "flowingliquid"
 		}, quickdef))
 
-minetest.register_node(modname .. ":slowsilver", {
+core.register_node(modname .. ":slowsilver", {
 		description = "Slowsilver",
 		tiles = {stabletxr},
 		groups = {
@@ -70,70 +70,70 @@ minetest.register_node(modname .. ":slowsilver", {
 			scaling_time = 500
 		},
 		paramtype = "light",
-		sounds = nodecore.sounds("nc_lode_tempered")
+		sounds = nc.sounds("nc_lode_tempered")
 	})
 ---------------------------------------------------------
 local solid = modname .. ":slowsilver"
 local src = modname.. ":quicksilver_source"
 ---------------------------------------------------------
-nodecore.register_fluidwandering(
+nc.register_fluidwandering(
 	"quicksilver",
 	{src},
 	4, --this is the interval
 	function(pos, _, gen)
 		if gen < 16 or math_random(1, 2) == 1 then return end
-		minetest.set_node(pos, {name = modname .. ":slowsilver"})
-		nodecore.dynamic_shade_add(pos, 1)
+		core.set_node(pos, {name = modname .. ":slowsilver"})
+		nc.dynamic_shade_add(pos, 1)
 		return true
 	end
 )
 ---------------------------------------------------------
-minetest.register_abm({
+core.register_abm({
 		label = "quicksilver quench",
 		interval = 1,
 		chance = 2,
 		nodenames = {src},
 		neighbors = {"group:coolant"},
 		action = function(pos)
-			nodecore.sound_play("nc_api_craft_hiss", {gain = 0.1, pos = pos})
-			nodecore.smokeburst(pos)
-			nodecore.dynamic_shade_add(pos, 1)
-			return minetest.set_node(pos, {name = solid})
+			nc.sound_play("nc_api_craft_hiss", {gain = 0.1, pos = pos})
+			nc.smokeburst(pos)
+			nc.dynamic_shade_add(pos, 1)
+			return core.set_node(pos, {name = solid})
 		end
 	})
 
-minetest.register_abm({
+core.register_abm({
 		label = "slowsilver melt",
 		interval = 12,
 		chance = 2,
 		nodenames = {solid},
 		arealoaded = 1,
 		action = function(pos)
-			if nodecore.quenched(pos) then return end
-			return nodecore.set_loud(pos, {name = src})
+			if nc.quenched(pos) then return end
+			return nc.set_loud(pos, {name = src})
 		end
 	})
 
-nodecore.register_aism({
+nc.register_aism({
 		label = "slowsilver stack melt",
 		interval = 12,
 		chance = 2,
 		arealoaded = 1,
 		itemnames = {solid},
 		action = function(stack, data)
-			if nodecore.quenched(data.pos) then return end
+			if nc.quenched(data.pos) then return end
 			if stack:get_count() == 1 and data.node then
-				local def = minetest.registered_nodes[data.node.name]
+				local def = core.registered_nodes[data.node.name]
 				if def and def.groups and def.groups.is_stack_only then
-					nodecore.set_loud(data.pos, {name = src})
+					nc.set_loud(data.pos, {name = src})
 					stack:take_item(1)
 					return stack
 				end
 			end
-			for rel in nodecore.settlescan() do
+			for rel in nc.settlescan() do
 				local p = vector.add(data.pos, rel)
-				if nodecore.buildable_to(p) then
-					nodecore.set_loud(p, {name = src})
+				if nc.buildable_to(p) then
+					nc.set_loud(p, {name = src})
 					stack:take_item(1)
 					return stack
 				end

@@ -1,11 +1,11 @@
 -- LUALOCALS < ---------------------------------------------------------
-local minetest, nodecore
-    = minetest, nodecore
+local minetest, core, nodecore, nc
+    = minetest, core, nodecore, nc
 -- LUALOCALS > ---------------------------------------------------------
-local modname = minetest.get_current_modname()
+local modname = core.get_current_modname()
 local vapor = {name = modname.. ":vapor"}
 ----------------------------------------------------------------------
-nodecore.register_craft({
+nc.register_craft({
 		label = "heat cinnabar cobble",
 		action = "cook",
 		touchgroups = {flame = 3},
@@ -21,22 +21,22 @@ nodecore.register_craft({
 		}
 	})
 ----------------------------------------------------------------------
-minetest.register_abm({
+core.register_abm({
 		label = "release quicksilver vapor",
 		nodenames = {modname .. ":cobble_hot"},
 		interval = 1,
 		chance = 1,
 		action = function(pos)
 			local above = {x = pos.x, y = pos.y + 1, z = pos.z}
-			if not nodecore.air_pass(above) then return end
-			nodecore.set_loud(pos, {name = "nc_terrain:cobble"})
-			nodecore.witness(pos, "quicksilver vapor release")
-			return nodecore.set_loud(above, vapor)
+			if not nc.air_pass(above) then return end
+			nc.set_loud(pos, {name = "nc_terrain:cobble"})
+			nc.witness(pos, "quicksilver vapor release")
+			return nc.set_loud(above, vapor)
 		end
 	})
 
 ----------------------------------------------------------------------
-nodecore.register_craft({
+nc.register_craft({
 		label = "cinnabar cooling",
 		action = "cook",
 		touchgroups = {flame = 0},
@@ -53,7 +53,7 @@ nodecore.register_craft({
 		}
 	})
 ----------------------------------------------------------------------
-nodecore.register_craft({
+nc.register_craft({
 		label = "cinnabar quenching",
 		action = "cook",
 		touchgroups = {flame = 0},
@@ -68,6 +68,6 @@ nodecore.register_craft({
 		}
 	})
 ----------------------------------------------------------------------
-nodecore.register_cook_abm({nodenames = {"group:cinnabar_cobble"}, neighbors = {"group:flame"}})
-nodecore.register_cook_abm({nodenames = {modname .. ":cobble_hot"}})
+nc.register_cook_abm({nodenames = {"group:cinnabar_cobble"}, neighbors = {"group:flame"}})
+nc.register_cook_abm({nodenames = {modname .. ":cobble_hot"}})
 ----------------------------------------------------------------------

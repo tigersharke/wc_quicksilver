@@ -1,6 +1,6 @@
 -- LUALOCALS < ---------------------------------------------------------
-local include, nodecore
-    = include, nodecore
+local include, nodecore, nc, core
+    = include, nodecore, nc, core
 -- LUALOCALS > ---------------------------------------------------------
 
 include("cinnabar")

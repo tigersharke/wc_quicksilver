@@ -1,8 +1,8 @@
 -- LUALOCALS < ---------------------------------------------------------
-local minetest, nodecore
-    = minetest, nodecore
+local minetest, core, nodecore, nc
+    = minetest, core, nodecore, nc
 -- LUALOCALS > ---------------------------------------------------------
-local modname = minetest.get_current_modname()
+local modname = core.get_current_modname()
 
 local cinnastone = "nc_terrain_stone.png^(nc_terrain_stone_hard.png^[opacity:50)"
 
@@ -25,7 +25,7 @@ local function tile(suff)
 end
 
 -- ================================================== --
-minetest.register_node(modname .. ":cinnabar", {
+core.register_node(modname .. ":cinnabar", {
 		description = ("Cinnabar"),
 		tiles = {cinnastone},
 		color = "coral",
@@ -34,13 +34,13 @@ minetest.register_node(modname .. ":cinnabar", {
 			cinnabar = 1,
 			cracky = 4,
 		},
-		sounds = nodecore.sounds("nc_terrain_stony"),
+		sounds = nc.sounds("nc_terrain_stony"),
 		drop_in_place = modname.. ":cobble"
 })
 
 -- ================================================== --
 
-minetest.register_node(modname .. ":cobble", {
+core.register_node(modname .. ":cobble", {
 		description = ("Cinnabar Cobble"),
 		tiles = {tile("")},
 		color = "coral",
@@ -49,7 +49,7 @@ minetest.register_node(modname .. ":cobble", {
 			cinnabar = 1,
 			cracky = 3
 		},
-		sounds = nodecore.sounds("nc_terrain_stony"),
+		sounds = nc.sounds("nc_terrain_stony"),
 		alternate_loose = {
 			tiles = {tile(loose)},
 			repack_level = 2,
@@ -58,13 +58,13 @@ minetest.register_node(modname .. ":cobble", {
 				crumbly = 3,
 				falling_repose = 2
 			},
-		sounds = nodecore.sounds("nc_terrain_chompy")		
+		sounds = nc.sounds("nc_terrain_chompy")		
 	}
 })
 
 -- ================================================== --
 
-minetest.register_node(modname .. ":cobble_hot", {
+core.register_node(modname .. ":cobble_hot", {
 		description = ("Inhibited Quicksilver"),
 		tiles = {tile("")},
 		paramtype = "light",
@@ -79,13 +79,13 @@ minetest.register_node(modname .. ":cobble_hot", {
 			damage_touch = 1,
 			damage_radiant = 1
 		},
-		sounds = nodecore.sounds("nc_terrain_stony"),
+		sounds = nc.sounds("nc_terrain_stony"),
 		stack_max = 1
 })
 
 -- ================================================== --
 
-minetest.register_ore({
+core.register_ore({
 	ore_type = "puff",
 	ore = modname.. ":cinnabar",
 	wherein = {"group:stone"},

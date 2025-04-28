@@ -1,8 +1,8 @@
 -- LUALOCALS < ---------------------------------------------------------
-local minetest, nodecore
-    = minetest, nodecore
+local minetest, core, nodecore, nc
+    = minetest, core, nodecore, nc
 -- LUALOCALS > ---------------------------------------------------------
-local modname = minetest.get_current_modname()
+local modname = core.get_current_modname()
 ------------------------------------------------------------------------
 local cob = ""
 local loose = ""
@@ -22,7 +22,7 @@ local function tile(suff)
 	}
 end
 -- ================================================================== --
-minetest.register_node(modname .. ":bricks", {
+core.register_node(modname .. ":bricks", {
 		description = ("Argent Cloudstone Bricks"),
 		tiles = {tile("")},
 		groups = {
@@ -33,10 +33,10 @@ minetest.register_node(modname .. ":bricks", {
 			nc_door_scuff_opacity = 24
 		},
 		crush_damage = 4,
-		sounds = nodecore.sounds("nc_terrain_stony")
+		sounds = nc.sounds("nc_terrain_stony")
 })
 ------------------------------------------------------------------------
-minetest.register_abm({
+core.register_abm({
 			label = "mercuriate bonded cloudstone bricks",
 			nodenames = {"nc_stonework:bricks_cloudstone_bonded"},
 			neighbors = {"group:quicksilver"},
@@ -44,15 +44,15 @@ minetest.register_abm({
 			interval = 2,
 			chance = 2,
 			action = function(pos)
-				nodecore.set_loud(pos, {name = modname .. ":bricks"})
-				nodecore.witness(pos, {
+				nc.set_loud(pos, {name = modname .. ":bricks"})
+				nc.witness(pos, {
 						"mercuriate bonded cloudstone bricks"
 					})
 			end
 		})
 
 ------------------------------------------------------------------------
-nodecore.register_craft({
+nc.register_craft({
 			label = "unbond argent bricks",
 			action = "pummel",
 			toolgroups = {cracky = 5},
@@ -68,14 +68,14 @@ nodecore.register_craft({
 -- ================================================================== --
 local palode = modname.. ":palode"
 local lodecube = "nc_lode:block_annealed"
-local lodef = nodecore.underride({
+local lodef = nc.underride({
 	description = "Pale Lode",
 	tiles = {"nc_lode_annealed.png^[colorize:ivory:32"},
 	groups = {argent = 1, palode = 1, damage_radiant = 1}
-}, minetest.registered_items[lodecube] or {})
-minetest.register_node(palode, lodef)
+}, core.registered_items[lodecube] or {})
+core.register_node(palode, lodef)
 ------------------------------------------------------------------------
-nodecore.register_craft({
+nc.register_craft({
 		label = "heat palode",
 		action = "cook",
 		touchgroups = {flame = 3},
@@ -85,7 +85,7 @@ nodecore.register_craft({
 		indexkeys = {modname.. ":palode"},
 		nodes = {{	match = {modname.. ":palode"},replace = "nc_lode:block_hot"}}
 	})
-nodecore.register_craft({
+nc.register_craft({
 		label = "palode stack heating",
 		action = "cook",
 		touchgroups = {flame = 3},
@@ -95,9 +95,9 @@ nodecore.register_craft({
 		nodes = {{match = {modname.. ":palode", count = false}}},
 		after = function(pos) return replacestack(pos, "nc_lode:block_hot") end
 	})
-nodecore.register_cook_abm({nodenames = {"group:palode"}, neighbors = {"group:flame"}})
+nc.register_cook_abm({nodenames = {"group:palode"}, neighbors = {"group:flame"}})
 ------------------------------------------------------------------------
-minetest.register_abm({
+core.register_abm({
 			label = "oxidize lode cube with quicksilver",
 			nodenames = {"group:lode_cube"},
 			neighbors = {"group:quicksilver"},
@@ -105,8 +105,8 @@ minetest.register_abm({
 			interval = 120,
 			chance = 10,
 			action = function(pos)
-				nodecore.set_node(pos, {name = modname .. ":palode"})
-				nodecore.witness(pos, {
+				nc.set_node(pos, {name = modname .. ":palode"})
+				nc.witness(pos, {
 						"oxidize lode cube with quicksilver"
 					})
 			end
